@@ -1,0 +1,711 @@
+\documentclass[12pt,a4paper]{article}
+
+\usepackage{amsmath}
+\usepackage{amssymb}
+\usepackage{amsthm}
+\usepackage{geometry}
+\usepackage{parskip}
+\usepackage{stmaryrd}
+
+\geometry{margin=2.5cm}
+
+\title{Quantum Support Vector Machines (QSVMs)}
+\author{Bob de Boisvilliers}
+
+\begin{document}
+
+\maketitle
+
+In order to understand Quantum Support Vector Machines (QSVMs), we first need a good understanding of what a Support Vector Machine (SVM) is. As the formal and exact definitions can easily be found elsewhere, we will instead focus on the ideas and the mathematics that define what an SVM is.
+
+\section{The hard-margin SVM}
+
+\subsection{The setup}
+
+We will consider a dataset of $n$ data points with each $k$ features, features being real numbers, and their associated label $y$ being $\pm 1$. So already, we make big assumptions about the format of the dataset an SVM will be working with, and what it will be able to learn, namely classify the data points in two classes, the positive and the negative class.
+
+Let's make sure we are rigorous about our math, so let's properly define our objects, first our dataset:
+\[
+n, k \in \mathbb{N}, \quad D = \{(x_i, y_i)\}_{i=1}^{n}, \quad x_i \in \mathbb{R}^k, \quad y_i \in \{-1, +1\}
+\]
+
+\subsection{Defining the objective}
+
+Now, what an SVM is trying to do is find a hyperplane $H$ that best separates all data points in the two classes, positive on one side and negative on the other. By ``best'' we mean maximizing the space between the hyperplane and the positive and negative points on each side; we will call such space the \emph{margin} $m$.
+
+It can be either strict or loose about it, meaning one could want a perfect separation, with all positive data points on one side and all negative on the other, or accept to have some wrongly classified points and also minimize the number of mistakes, i.e.\ some points labeled positive being classified as negative and vice versa. For now, let's consider the strict case and see how we can go about loosely classifying some points later.
+
+We are thus interested in the expression of a hyperplane $H$ in dimension $k$:
+\[
+H = \left\{ x \in \mathbb{R}^k \;\middle|\; w \cdot x + b = 0 \right\}, \quad w \in \mathbb{R}^k,\; w \neq 0,\; b \in \mathbb{R}
+\]
+
+Let's now consider two support hyperplanes $H_-$ and $H_+$ parallel to $H$ such that they are $c$ units away:
+\[
+H_{\pm} = \left\{ x \in \mathbb{R}^k \;\middle|\; w \cdot x + b = \pm c \right\}, \quad c \in \mathbb{R}
+\]
+
+Think about it: if they were not the same amount away from $H$, then the margin would decrease. If say $H_-$ is closer to $H$ than $H_+$, then the margin would be whatever that distance is, which is smaller than whatever we had before, so for the margin to be maximal we really need the two support hyperplanes to be the same amount away from $H$. Also notice that if we divide by $c$ we could just have chosen different $w$ and $b$ from the get-go, and as such and without loss of generality we can define:
+\[
+H_{\pm} = \left\{ x \in \mathbb{R}^k \;\middle|\; w \cdot x + b = \pm 1 \right\}
+\]
+
+Remember, we want to find $w$ and $b$ such that the margin $m$ is maximal, but for that we need an expression for that margin. Turns out there is a neat formula to get the distance between two parallel hyperplanes defined by $w \cdot x + b = \alpha$ and $w \cdot x + b = \beta$:
+\[
+\frac{|\alpha - \beta|}{\|w\|}
+\]
+
+If we consider $H$ and $H_+$ for example, we would get:
+\[
+m = \frac{|0 - 1|}{\|w\|} = \frac{1}{\|w\|}
+\]
+
+\subsection{Defining the constraints}
+
+Great, now let's step back. What constraints do we want on $H$? Let's consider the two classes separately:
+\begin{align*}
+y_i = +1 &\Rightarrow w \cdot x_i + b \geq +1 \\
+y_i = -1 &\Rightarrow w \cdot x_i + b \leq -1
+\end{align*}
+
+We are basically saying that, if a point is labeled positive then it must be above $H_+$, and if a point is labeled negative then it must be below $H_-$.
+
+We can express these two conditions as one with:
+\[
+y_i(w \cdot x_i + b) \geq 1
+\]
+
+\subsection{The wrap up}
+
+Great! We have everything we need to find the hyperplane $H$ that best separates all data points in the two classes. To wrap up, a \textbf{hard-margin SVM} therefore solves:
+\[
+\max_{w,\,b} \frac{1}{\|w\|}, \quad \text{subject to } y_i(w \cdot x_i + b) \geq 1,\ \forall i \in \llbracket 1, n \rrbracket
+\]
+
+Or equivalently:
+\[
+\min_{w,\,b} \|w\|, \quad \text{subject to } y_i(w \cdot x_i + b) \geq 1,\ \forall i \in \llbracket 1, n \rrbracket
+\]
+
+And we define the \emph{support vectors} that verify $y_i(w \cdot x_i + b) = 1$, basically those that are exactly sitting on $H_+$ or $H_-$. Now, it hopefully makes more sense why we call this a Support Vector Machine\ldots
+
+\section{The soft-margin SVM}
+
+\subsection{Motivations and intuition}
+
+Now, this model isn't really useful, as real life datasets are noisy and often contain outliers. This is the motivation for a \textbf{soft-margin SVM}.
+
+Intuitively, what we need is a penalty for points that are on the wrong side of their hyperplane $H_{\pm}$. Say a positive point above $H_+$, then its penalty should be $0$; now say another positive point but below $H_+$, its penalty should be proportional to its distance to $H_+$; same reasoning for negative points.
+
+\subsection{Deriving a proper penalty}
+
+This could be done by simply computing the distance between two points, one being the point itself and the second being its projection on the hyperplane:
+\[
+x_{\perp} = x - \frac{w \cdot x + b - c}{\|w\|^2}\, w
+\]
+if we are given a hyperplane defined by $w \cdot x + b = c$.
+
+This follows from the fact that $w$ is actually normal to the hyperplane it defines, but that's not our focus here. We can thus define the vector between $x$ and its projection $x_{\perp}$ and consider its norm:
+\[
+\|x - x_{\perp}\| = \frac{|w \cdot x + b - c|}{\|w\|}
+\]
+
+The details of this derivation aren't relevant to us; let's just use the result and continue on with our QSVM story.
+
+Notice that when $c = +1$ then we are considering positive points against $H_+$ and therefore $y_i = +1$, and when $c = -1$ then we are considering negative points against $H_-$ and therefore $y_i = -1$; in other words $c$ is always $y_i$.
+
+Let's now build our penalty function, let's call it $L$:
+\[
+L(x_i, y_i) = \begin{cases} 0 & y_i(w \cdot x_i + b) \geq 1 \\ \dfrac{|w \cdot x_i + b - y_i|}{\|w\|} & y_i(w \cdot x_i + b) < 1 \end{cases}
+\]
+
+Now, notice that $|y_i| = y_i^2 = 1$ and thus $|w \cdot x_i + b - y_i| = |y_i||w \cdot x_i + b - y_i|$,
+
+and since $|a||b| = |ab|$,
+\[
+|y_i||w \cdot x_i + b - y_i| = |y_i(w \cdot x_i + b - y_i)| = \left|y_i(w \cdot x_i + b) - y_i^2\right| = |y_i(w \cdot x_i + b) - 1|
+\]
+
+and since $|a| = |-a|$,
+\[
+|y_i(w \cdot x_i + b) - 1| = |-(y_i(w \cdot x_i + b) - 1)| = |1 - y_i(w \cdot x_i + b)|
+\]
+
+and thus we have $|w \cdot x_i + b - y_i| = |1 - y_i(w \cdot x_i + b)|$.
+
+While this expression is geometrically valid, we note that the parameterization of a hyperplane is invariant under positive rescaling of $w$ and $b$. As such, without loss of generality, we can absorb any normalization, in the same way we previously fixed the support hyperplanes $H_{\pm}$ to lie at unit distance from the separating hyperplane $H$. This allows us to remove the explicit dependence on $\|w\|$ in the denominator, yielding:
+\[
+L(x_i, y_i) = \begin{cases} 0 & y_i(w \cdot x_i + b) \geq 1 \\ |1 - y_i(w \cdot x_i + b)| & y_i(w \cdot x_i + b) < 1 \end{cases}
+\]
+
+Now, notice that:
+\[
+y_i(w \cdot x_i + b) < 1 \Rightarrow -y_i(w \cdot x_i + b) \geq -1 \Rightarrow 1 - y_i(w \cdot x_i + b) \geq 0
+\]
+
+Meaning, we don't even need the absolute values:
+\[
+L(x_i, y_i) = \begin{cases} 0 & y_i(w \cdot x_i + b) \geq 1 \\ 1 - y_i(w \cdot x_i + b) & y_i(w \cdot x_i + b) < 1 \end{cases}
+\]
+
+using the fact that
+\[
+\max(a, b) = \begin{cases} a & a \geq b \\ b & a < b \end{cases}
+\]
+
+It can be shown that:
+\[
+L(x_i, y_i) = \max\!\left(0,\, 1 - y_i(w \cdot x_i + b)\right)
+\]
+
+People already familiar with SVMs will recognize this as the \textbf{Hinge loss}, the usual loss used for SVMs.
+
+\subsection{Adjusting the constraints}
+
+Now the next question is: what constraint do we want on $w$ and $b$, now that we allow some points to be on the wrong side of their support hyperplane?
+
+Taking the condition $y_i(w \cdot x_i + b) \geq 1$ again, we can relax this condition using a slack variable $\xi_i \in \mathbb{R}^+$:
+\[
+y_i(w \cdot x_i + b) \geq 1 - \xi_i
+\]
+
+with the following interpretation:
+\begin{itemize}
+    \item $\xi_i = 0$: correctly classified
+    \item $0 < \xi_i < 1$: still correctly classified, but close to the decision boundary $H$, that is, within the margin
+    \item $\xi_i \geq 1$: wrongly classified, beyond the decision boundary $H$
+\end{itemize}
+
+Rearranging we have that $\xi_i \geq 1 - y_i(w \cdot x_i + b)$; all together, since $\xi_i \in \mathbb{R}^+$:
+\[
+\xi_i \geq max(0, 1 - y_i(w \cdot x_i + b))
+\]
+
+\subsection{The wrap up}
+
+Since the goal would be to minimize their sum, there would be no benefit to penalize more than necessary; we can therefore consider the equality $\xi_i = \max(0,\, 1 - y_i(w \cdot x_i + b))$, which makes $\xi_i$ a function of $w$ and $b$.
+
+With that, we finally have everything we need to wrap up what a \textbf{soft-margin SVM} solves:
+\[
+\min_{w,\,b} \|w\| + \sum_{i=1}^{n} \xi_i(w, b) = \min_{w,\,b} \|w\| + \sum_{i=1}^{n} \max\!\left(0,\, 1 - y_i(w \cdot x_i + b)\right)
+\]
+
+One final note: you may have noticed that we wrote $\|w\|$ in our objective,
+but it is common in the literature to instead minimize $\|w\|^2$. Since
+$\|\cdot\|^2$ is a monotone transformation of $\|\cdot\|$ for non-negative
+values, minimizing one is equivalent to minimizing the other, so this is
+purely a matter of convenience: $\|w\|^2$ is differentiable everywhere,
+which makes it much friendlier for the optimization machinery we will
+develop shortly.
+
+It is also common to introduce a tuning parameter $\lambda \in \mathbb{R}^+$
+in front of the sum of hinge losses:
+\[
+\min_{w,\,b}\; \|w\|^2 + \lambda \sum_{i=1}^{n}
+\max\!\left(0,\, 1 - y_i(w \cdot x_i + b)\right)
+\]
+
+Intuitively, $\lambda$ controls how much we care about misclassifications
+relative to the size of the margin. A large $\lambda$ says: ``I really want
+to classify everything correctly, even if the margin shrinks.'' A small
+$\lambda$ says: ``I want a wide margin, even if a few points end up on the
+wrong side.'' This trade-off is fundamental to how SVMs are used in practice,
+and $\lambda$ is typically chosen by cross-validation. We will carry with this
+form onward.
+
+It is also very common to refer to this SVM formulation as the "primal" later, so keep this in mind.
+
+\newpage
+
+\section{When a hyperplane is not enough}
+
+So far we have assumed that the two classes are linearly separable, at
+least approximately. But what if they are not, even approximately? Consider
+a dataset where the positive points form a ring around the negative ones:
+no hyperplane in $\mathbb{R}^k$ will ever separate them, no matter how
+generously we set $\lambda$.
+
+The problem is not our SVM formulation, it is the space we are working in.
+A hyperplane is a linear object, and linear objects can only carve out
+half-spaces. If the true boundary between the two classes is curved, we are
+asking the wrong question.
+
+The natural fix is to ask: what if we could map our data into a different
+space, one where the classes \emph{are} linearly separable? More precisely,
+let us consider a function
+\[
+\Phi : \mathbb{R}^k \to \mathcal{F}
+\]
+where $\mathcal{F}$ is some other vector space, possibly of much higher
+dimension, and apply our SVM there. The idea is that adding dimensions gives
+us more room to find a separating hyperplane. In the extreme case where
+$\mathcal{F}$ is infinite-dimensional, this is almost always possible for
+any reasonable dataset.
+
+Let's make this concrete. Say our data lives in $\mathbb{R}^2$ and we
+consider the map
+\[
+\Phi(x_1, x_2) = (x_1^2,\, \sqrt{2}\, x_1 x_2,\, x_2^2)
+\]
+
+A dataset that is not linearly separable in $\mathbb{R}^2$ may very well
+become linearly separable in $\mathbb{R}^3$ after this mapping. The
+separating hyperplane in $\mathcal{F}$ corresponds to a \emph{curved}
+decision boundary back in the original space $\mathbb{R}^k$, which is
+exactly what we needed.
+
+So the plan is clear: apply $\Phi$ to all data points, then run our
+soft-margin SVM in $\mathcal{F}$. The objective becomes:
+\[
+\min_{w,\,b}\; \|w\|^2 + \lambda \sum_{i=1}^{n}
+\max\!\left(0,\, 1 - y_i(w \cdot \Phi(x_i) + b)\right)
+\]
+
+This is perfectly valid. The catch is that $w$ now lives in $\mathcal{F}$,
+and if $\mathcal{F}$ is high-dimensional, or worse infinite-dimensional,
+working with $w$ explicitly becomes computationally intractable or even
+impossible. We need a smarter approach.
+
+\newpage
+
+\section{The dual formulation}
+
+\subsection{The Lagrangian}
+
+The smarter approach comes from a classical trick in constrained
+optimization. Let us go back to the constrained form of the primal problem,
+now written in $\mathcal{F}$:
+\[
+\min_{w,\,b,\,\xi}\; \|w\|^2 + \lambda\sum_{i=1}^n \xi_i
+\quad \text{subject to} \quad
+\begin{cases}
+y_i(w \cdot \Phi(x_i) + b) \geq 1 - \xi_i \\
+\xi_i \geq 0
+\end{cases}
+\]
+
+The idea behind the Lagrangian method is the following: rather than
+explicitly enforcing the constraints, we add a penalty to the objective
+for violating them. Each constraint gets its own multiplier, a non-negative
+real number that controls how harshly we penalize violations. If a constraint
+is satisfied, its penalty contributes nothing; if it is violated, it pulls
+the objective upward. The result is that minimizing the penalized objective
+over all $(w, b, \xi)$ while maximizing over the multipliers is equivalent
+to solving the constrained problem.
+
+Concretely, we introduce multipliers $\alpha_i \in \mathbb{R}^+$ for the margin
+constraints and $\mu_i \in \mathbb{R}^+$ for the non-negativity of $\xi_i$, and
+define the Lagrangian:
+\[
+\mathcal{L}(w,b,\xi,\alpha,\mu)
+= \|w\|^2 + \lambda\sum_{i=1}^n \xi_i
+- \sum_{i=1}^n \alpha_i\bigl(y_i(w \cdot \Phi(x_i) + b) - 1 + \xi_i\bigr)
+- \sum_{i=1}^n \mu_i \xi_i
+\]
+
+\subsection{Stationarity conditions}
+
+To find the dual problem, we minimize $\mathcal{L}$ over the primal
+variables $(w, b, \xi)$. At the minimum, the partial derivatives vanish.
+
+Starting with $w$:
+\[
+\frac{\partial \mathcal{L}}{\partial w} = 0
+\quad \Rightarrow \quad
+w = \frac{1}{2}\sum_{i=1}^n \alpha_i y_i \Phi(x_i)
+\]
+
+This is already telling us something important: the optimal $w$ is a linear
+combination of the mapped data points $\Phi(x_i)$, weighted by the $\alpha_i$.
+We do not need to find $w$ in $\mathcal{F}$ explicitly, it is entirely
+determined by the dual variables $\alpha_i$.
+
+Moving on to $b$:
+\[
+\frac{\partial \mathcal{L}}{\partial b} = 0
+\quad \Rightarrow \quad
+\sum_{i=1}^n \alpha_i y_i = 0
+\]
+
+And for each $\xi_i$:
+\[
+\frac{\partial \mathcal{L}}{\partial \xi_i} = 0
+\quad \Rightarrow \quad
+\lambda - \alpha_i - \mu_i = 0
+\quad \Rightarrow \quad
+\alpha_i = \lambda - \mu_i
+\]
+
+Since both $\alpha_i \geq 0$ and $\mu_i \geq 0$, this gives us the box
+constraint $0 \leq \alpha_i \leq \lambda$.
+
+\subsection{Arriving at the dual}
+
+Now we substitute these conditions back into $\mathcal{L}$. The substitution
+is algebraically involved but the result is clean: the primal variables $w$,
+$b$, and $\xi$ all disappear, and we are left with an optimization problem
+purely in the $\alpha_i$. We will not carry out every line here, the key
+step is substituting $w = \frac{1}{2}\sum_i \alpha_i y_i \Phi(x_i)$ into
+the $\|w\|^2$ term, but the result is:
+
+\[
+\max_{\alpha}\;
+\sum_{i=1}^n \alpha_i
+- \frac{1}{4}
+\sum_{i=1}^n \sum_{j=1}^n
+\alpha_i \alpha_j y_i y_j
+\langle \Phi(x_i),\, \Phi(x_j) \rangle
+\]
+\[
+\text{subject to} \quad
+\sum_{i=1}^n \alpha_i y_i = 0,
+\quad
+0 \leq \alpha_i \leq \lambda
+\]
+
+This is the dual problem. It is a quadratic program in $n$ variables, and
+critically it makes no reference to the dimension of $\mathcal{F}$ whatsoever.
+
+\subsection{The inner product observation}
+
+Look at how the data appears in the dual: only through inner products
+$\langle \Phi(x_i), \Phi(x_j) \rangle$ between pairs of mapped points.
+The same is true of the decision function: substituting $w$ back, we get
+\[
+f(x) = \frac{1}{2}\sum_{i=1}^n \alpha_i y_i
+\langle \Phi(x_i),\, \Phi(x) \rangle + b
+\]
+
+This is the moment to pause and notice what we have just discovered. The
+high-dimensional space $\mathcal{F}$, the very thing that made the primal
+intractable, has completely vanished from both the training problem and the
+prediction rule. All that remains are inner products between pairs of points,
+before and after mapping. We never need to construct $w$ in $\mathcal{F}$.
+We never even need to know $\mathcal{F}$ explicitly.
+
+All we need is a way to compute $\langle \Phi(x_i), \Phi(x_j) \rangle$.
+
+\newpage
+
+\section{The kernel trick}
+
+\subsection{Kernels}
+
+This observation leads us to define a \emph{kernel function}:
+\[
+K(x, x') = \langle \Phi(x),\, \Phi(x') \rangle
+\]
+
+A kernel is simply a function that computes the inner product in $\mathcal{F}$
+without ever going there. And here is where things get interesting: for many
+useful choices of $\Phi$, computing $K(x, x')$ directly in the original
+space $\mathbb{R}^k$ is far cheaper than explicitly constructing $\Phi(x)$
+and taking the inner product in $\mathcal{F}$.
+
+Recall the map $\Phi(x_1, x_2) = (x_1^2, \sqrt{2}\,x_1 x_2, x_2^2)$ from
+earlier. Let us compute its kernel:
+\begin{align*}
+K(x, x')
+&= \langle \Phi(x), \Phi(x') \rangle \\
+&= x_1^2 {x_1'}^2 + 2 x_1 x_2 x_1' x_2' + x_2^2 {x_2'}^2 \\
+&= (x_1 x_1' + x_2 x_2')^2 \\
+&= (x \cdot x')^2
+\end{align*}
+
+The inner product in a three-dimensional space reduces to a single
+multiplication in the original two-dimensional space. This is the kernel
+trick: we swapped an expensive operation in $\mathcal{F}$ for a cheap one
+in $\mathbb{R}^k$.
+
+More generally, it can be shown that any function of the form
+$(x \cdot x' + c)^d$ for $c \geq 0$ corresponds to an inner product in
+the space spanned by all monomials of degree up to $d$. The polynomial
+kernel of degree $d$ is therefore:
+\[
+K(x, x') = (x \cdot x' + c)^d
+\]
+
+Another widely used kernel is the \textbf{Radial Basis Function (RBF) kernel},
+also known as the Gaussian kernel:
+\[
+K(x, x') = \exp\!\left(-\frac{\|x - x'\|^2}{2\sigma^2}\right), \sigma \in \mathbb{R}^*
+\]
+
+It can be shown that this kernel corresponds to an inner product in an
+\emph{infinite}-dimensional feature space, the Taylor expansion of the
+exponential generates monomials of all degrees simultaneously. The parameter
+$\sigma$ controls how quickly the kernel decays with distance: a small
+$\sigma$ makes the kernel very sensitive to proximity, while a large $\sigma$
+smooths things out. What makes the RBF kernel remarkable in the context of
+what we have built is that working with it in the primal would be literally
+impossible, you cannot store an infinite-dimensional vector $w$. Yet in
+the dual, it costs exactly one exponential per kernel evaluation, no more
+expensive than the polynomial case.
+
+\newpage
+
+\subsection{The kernelized SVM}
+
+Replacing all inner products in the dual with $K$, we arrive at the
+\textbf{kernelized soft-margin SVM}:
+\[
+\max_{\alpha}\;
+\sum_{i=1}^n \alpha_i
+- \frac{1}{4}
+\sum_{i=1}^n \sum_{j=1}^n
+\alpha_i \alpha_j y_i y_j K(x_i, x_j)
+\]
+\[
+\text{subject to} \quad
+\sum_{i=1}^n \alpha_i y_i = 0,
+\quad
+0 \leq \alpha_i \leq \lambda
+\]
+
+with decision function:
+\[
+f(x) = \frac{1}{2}\sum_{i=1}^n \alpha_i y_i K(x_i, x) + b
+\]
+
+At no point did we need to know $\mathcal{F}$, construct $\Phi(x)$ for
+any point, or store a vector $w$ in a high-dimensional space. The kernel
+matrix $K_{ij} = K(x_i, x_j)$ is all we ever compute.
+
+There is one thing worth pausing on, though. We wrote ``the kernel matrix
+$K_{ij} = K(x_i, x_j)$ is all we ever compute,'' which might give the
+impression that the problem is essentially free: after all, each kernel
+evaluation is cheap, so why would computing all $n^2$ of them be a
+concern? The answer is that the bottleneck is not the kernel evaluations
+themselves, it is the quadratic program. To maximize over all $\alpha_i$
+simultaneously, the solver needs to reason about how every pair $(i, j)$
+interacts through the term $\alpha_i \alpha_j K(x_i, x_j)$. In principle
+one could recompute kernel entries on the fly rather than storing them,
+but the $\mathcal{O}(n^2 k)$ computational cost of visiting all pairs
+remains regardless. Whether or not you cache the results, the quadratic
+program is the true bottleneck, and it is inherently quadratic in $n$.
+
+\subsection{What the decision boundary looks like}
+
+Let us step back into the original space $\mathbb{R}^k$ and ask: what does
+the decision boundary actually look like? A point $x$ is on the boundary
+when $f(x) = 0$, that is, when
+\[
+\frac{1}{2}\sum_{i=1}^n \alpha_i y_i K(x_i, x) + b = 0
+\]
+
+For the polynomial kernel $(x \cdot x' + c)^d$ with $d > 1$, this is a
+polynomial equation in $x$, a curved surface in $\mathbb{R}^k$. We have
+successfully recovered nonlinear decision boundaries while working entirely
+with a linear machine in the lifted space.
+
+\newpage
+
+\section{Classical computational bottlenecks}
+
+Now that we have the full picture, we can be precise about where classical
+computation struggles and how far people have pushed back against those
+limits.
+
+The dual problem we need to solve is a quadratic program in $n$ variables
+with a dense $n \times n$ matrix of kernel evaluations coupling them.
+Naively, this scales as $\mathcal{O}(n^2 k)$ to compute the kernel matrix
+and $\mathcal{O}(n^3)$ to solve the quadratic program. For a dataset of
+even a few hundred thousand points, the kernel matrix alone becomes
+gigabytes of memory, and the solver becomes impractical.
+
+The $\mathcal{O}(n^3)$ term reflects the cost of dense linear-algebra
+operations required by generic quadratic programming solvers, such as
+factorizing and solving systems involving the $n \times n$ kernel matrix.
+
+\textbf{Sequential Minimal Optimization (SMO)}~\cite{Platt99} has been the main classical response to this. Rather than solving the full quadratic
+program at once, SMO decomposes it into a series of the smallest possible
+subproblems: at each step it picks just two $\alpha_i$ to optimize jointly,
+which has an analytic solution, and iterates until convergence. This avoids
+storing the full kernel matrix at once,  kernel entries can be recomputed
+on the fly as needed,  and in practice SMO runs much faster than naive
+solvers. It remains, however, at best $\mathcal{O}(n^{2.5})$ in the worst
+case and still touches $\mathcal{O}(n^2)$ pairs over the course of training.
+
+Further approaches have tried to reduce the effective size of the problem
+before solving it. \textbf{Core Vector Machines}~\cite{Tsang05} exploit the
+geometric connection between the SVM dual and the minimum enclosing ball
+problem: they identify a small ``core set'' of points that approximately
+determines the solution, and solve a much smaller quadratic program over
+that set. The core set is typically far smaller than $n$ in practice,
+bringing the cost down to nearly linear in $n$ for many datasets.
+\textbf{Clustering-based methods} go further by first reducing the dataset
+to cluster representatives and running the SVM only on those, trading a
+small amount of accuracy for a large reduction in $n$.
+
+There are also \textbf{random feature approximations}~\cite{Rahimi07},
+which replaces the kernel $K(x_i, x_j)$ with an explicit finite-dimensional
+approximation $\tilde{\Phi}(x_i) \cdot \tilde{\Phi}(x_j)$ constructed via
+random projections. This converts the kernelized SVM back into something
+resembling a primal problem, but in a manageable finite-dimensional space,
+allowing standard linear solvers to be used. The Nyström method similarly
+approximates the full kernel matrix from a low-rank sketch computed on a
+random subset of the data.
+
+So the situation is nuanced. For moderate $n$ (say, up to $10^5$), a
+well-implemented SMO solver handles most practical problems comfortably.
+Beyond that, approximation methods can extend the reach considerably,
+but they all involve some trade-off: either the kernel is approximated,
+the dataset is compressed, or accuracy is sacrificed. There is no known
+classical algorithm that solves the exact kernelized SVM in better than
+$\mathcal{O}(n^2)$ time in general.
+
+Importantly, notice that $k$, the data dimension, has almost entirely
+dropped out of this story. It appears only in the cost of each individual
+kernel evaluation, and for kernels like the polynomial or RBF, that cost
+is $\mathcal{O}(k)$ per entry, which is negligible once $n$ grows large.
+The wall is $n$, not $k$.
+
+\newpage
+
+\section{The quantum perspective}
+
+This is precisely the gap where a quantum computer might have something
+to say, but we need to be careful about \emph{exactly} what claim we are
+making, because the honest version is narrower than it is often presented.
+
+\subsection{What the quantum proposal actually is}
+
+The idea behind \textbf{quantum kernel methods}, introduced independently
+by Havlíček et al.~\cite{Havlicek19} and Schuld \& Killoran~\cite{Schuld19}
+in 2019, is to define the feature map as a quantum circuit: given a data
+point $x$, we prepare a quantum state
+\[
+|\psi(x)\rangle = U(x)|0^{\otimes m}\rangle
+\]
+where $U(x)$ is a parameterized unitary acting on $m$ qubits. The quantum
+kernel is then the overlap between two such states:
+\[
+K(x_i, x_j) = |\langle \psi(x_i) | \psi(x_j) \rangle|^2
+\]
+
+This is estimated on a quantum device by preparing $|\psi(x_i)\rangle$,
+applying $U(x_j)^\dagger$, and measuring the probability of returning to
+the all-zeros state. The SVM training then proceeds entirely classically,
+using the quantum device only to fill in the kernel matrix.
+
+The claim is not that the quadratic program becomes easier to solve, 
+it doesn't. The claim is about \emph{kernel expressiveness}: for certain
+choices of $U(x)$, the resulting kernel may capture structure in the data
+that no efficient classical kernel can. Liu et al.~\cite{Liu21} made this
+rigorous: they constructed a family of classification problems, built around
+the hardness of the discrete logarithm problem, for which a quantum kernel
+method achieves high accuracy while any efficient classical learner performs
+no better than random guessing. This is a genuine, provable separation.
+
+\subsection{The data loading problem}
+
+There is, however, a fundamental difficulty that this framing tends to
+obscure. To evaluate $K(x_i, x_j)$ on a quantum device, we need to encode
+$x_i$ and $x_j$ as quantum states for every one of the $\mathcal{O}(n^2)$
+pairs. Encoding a single classical data point $x \in \mathbb{R}^k$ into a
+quantum state costs at least $\mathcal{O}(k)$ classical operations,  you
+have to read the data before you can encode it,  and for generic state
+preparation the cost can be far worse, potentially exponential in the number
+of qubits.
+
+This means that filling the kernel matrix still costs $\mathcal{O}(n^2 k)$
+at best, identical to the classical baseline. The quantum circuit in the
+middle buys nothing on that count. This is known as the \textbf{data loading
+problem}, and it is arguably the central obstacle for quantum machine
+learning on classical data: in many realistic scenarios, the cost of moving
+data into and out of the quantum device cancels the theoretical advantage of
+whatever quantum computation happens in between.
+
+So let us be precise. The classical bottleneck we identified was the
+quadratic program scaling in $n$. A quantum kernel does not help with that.
+It also does not reduce the $\mathcal{O}(n^2)$ number of kernel evaluations
+needed. What it offers, if $U(x)$ is chosen well, is a kernel that is
+\emph{classically hard to evaluate},  meaning a classical computer cannot
+efficiently simulate $U(x)$ and therefore cannot compute $K(x_i, x_j)$
+without running the quantum circuit. But if encoding $x$ into
+$|\psi(x)\rangle$ already costs $\mathcal{O}(k)$ per point, and we need
+$\mathcal{O}(n^2)$ evaluations, the overall complexity is not better than
+classical.
+
+\subsection{When the argument survives}
+
+The picture changes meaningfully in one setting: when the data is
+\emph{already quantum}. If $x_i$ originates from a physical process, 
+a quantum sensor, a chemistry simulation, a quantum communication channel, then the state $|\psi(x_i)\rangle$ is produced by nature directly, at
+no encoding cost. In that case, the kernel overlap is genuinely cheaper to
+obtain on a quantum device than to simulate classically, because the
+classical simulation of $|\psi(x_i)\rangle$ may itself be intractable.
+
+This \textbf{quantum data} setting is arguably where the QSVM argument is
+the most honest. The discrete log construction of Liu et al.~\cite{Liu21}
+also sidesteps the data loading problem, because the data is synthetically
+generated to make quantum encoding tractable and the classical hardness lies
+entirely in the pattern recognition step. It is a valid proof of principle,
+but it tells us little about what happens with real sensor data or molecular
+spectra.
+
+\subsection{Where things stand}
+
+The honest summary is therefore this. For large classical datasets with many
+data points, quantum kernel methods do not offer a well-justified advantage
+today: the data loading cost restores the $\mathcal{O}(n^2 k)$ floor that
+classical methods already achieve, and the quadratic program remains equally
+hard. Classical approximation methods,  SMO~\cite{Platt99}, random
+features~\cite{Rahimi07}, Nyström,  handle moderate $n$ well and scale
+gracefully with approximation.
+
+The residual cases of genuine interest are datasets that are either
+quantum-native, or that possess algebraic or group-theoretic structure that
+quantum feature maps can exploit and classical ones cannot. Finding such
+structure in practically relevant problems is an active and largely open
+research question. It is not clear yet whether the separation of
+Liu et al.~\cite{Liu21} corresponds to anything that occurs naturally in
+the problems people actually want to solve.
+
+This is not a reason to dismiss QSVMs. It is a reason to be precise about
+what problem they are solving. The SVM framework, as we have derived it, is
+agnostic about how the kernel is computed: replace $K(x_i, x_j)$ with any
+valid kernel function, quantum or classical, and the mathematics goes through
+unchanged. The question of whether a quantum device can supply a kernel that
+is both hard to evaluate classically \emph{and} genuinely useful for real
+data is the open problem at the frontier. That is where the story currently
+ends, and where the next chapter begins.
+
+\newpage
+    \begin{thebibliography}{9}
+    
+    \bibitem{Platt99}
+    Platt, J.\ C.\ (1999).
+    \textit{Sequential Minimal Optimization: A Fast Algorithm for Training
+    Support Vector Machines}.
+    Microsoft Research Technical Report MSR-TR-98-14.
+    
+    \bibitem{Tsang05}
+    Tsang, I.\ W., Kwok, J.\ T., \& Cheung, P.\ M.\ (2005).
+    \textit{Core Vector Machines: Fast SVM Training on Very Large Data Sets}.
+    Journal of Machine Learning Research, 6, 363--392.
+    
+    \bibitem{Rahimi07}
+    Rahimi, A., \& Recht, B.\ (2007).
+    \textit{Random Features for Large-Scale Kernel Machines}.
+    Advances in Neural Information Processing Systems (NeurIPS), 20.
+    
+    \bibitem{Havlicek19}
+    Havlíček, V., Córcoles, A.\ D., Temme, K., et al.\ (2019).
+    \textit{Supervised learning with quantum-enhanced feature spaces}.
+    Nature, 567, 209--212.
+    
+    \bibitem{Schuld19}
+    Schuld, M., \& Killoran, N.\ (2019).
+    \textit{Quantum machine learning in feature Hilbert spaces}.
+    Physical Review Letters, 122(4), 040504.
+    
+    \bibitem{Liu21}
+    Liu, Y., Arunachalam, S., \& Temme, K.\ (2021).
+    \textit{A rigorous and robust quantum speed-up in supervised machine
+    learning}.
+    Nature Physics, 17, 726--736.
+    
+    \end{thebibliography}
+
+\end{document}
