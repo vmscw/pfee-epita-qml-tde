@@ -1,0 +1,25 @@
+These 3 ideas are about MLPs
+They were inspired by https://youtu.be/IHZwWFHWa-w?si=Sh_Ng5KNSMgobdQG
+
+while learning to classify structured data
+make sure noise as input is noise as ouput when training
+this might help the network understand that the features it has to learn should
+reflect some semantic and not memorizing the dataset
+
+maybe something else that could be done is say for the mnist dataset to better understand the idea
+if we train only with labels all 0 and one digit at 1 as output
+even with the noise -> noise idea from before, we might also want to accept the negative as a prediction
+it could be easier to predict what something is not than what something is
+so maybe it's easier to do it by elimination, that's something humans do when they are unsure
+but they know what the wrong answers are, maybe they end up with a reduced choice set
+since activation can be seen as something the cost function motivates,
+also accepting labels all 1 and one digit at 0 as output could help training?
+so the cost function would take the min between
+the distance of the pred and both positive and negative outputs
+maybe it's faster to converge  
+
+to counter more the memorization possibility we could make sure the model gets bad performance
+no matter what we do when we shuffle the labels
+making sure memorization is impossible or at least too hard to reach with reasonable training time
+and only then training with the right labels
+it will ensure just the right number of neurons is chosen
