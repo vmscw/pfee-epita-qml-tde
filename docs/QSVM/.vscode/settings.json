@@ -1,0 +1,31 @@
+{
+    /*
+		Formatting options
+	*/
+    // It's often more practical to allow them
+    "json.schemas": [
+        {
+            "fileMatch": ["*.code-workspace*"],
+            "schema": {
+                "allowTrailingCommas": true
+            }
+        }
+    ],
+    "files.insertFinalNewline": true,
+    "editor.rulers": [120],
+    "editor.formatOnSave": true,
+    "editor.detectIndentation": false,
+    "editor.insertSpaces": false,
+    "editor.tabSize": 4,
+    "prettier.tabWidth": 4,
+    "prettier.trailingComma": "all",
+    "[python]": {
+        "editor.defaultFormatter": "charliermarsh.ruff"
+    },
+    "[json]": {
+        "editor.defaultFormatter": "esbenp.prettier-vscode"
+    },
+    "[jsonc]": {
+        "editor.defaultFormatter": "esbenp.prettier-vscode"
+    }
+}
