@@ -23,3 +23,6 @@ no matter what we do when we shuffle the labels
 making sure memorization is impossible or at least too hard to reach with reasonable training time
 and only then training with the right labels
 it will ensure just the right number of neurons is chosen
+
+je pose ca la:
+https://nickyoder.com/johnson-lindenstrauss/
