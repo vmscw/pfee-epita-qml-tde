@@ -11,10 +11,7 @@ dependencies = [
 	"nbformat",
 	"openml",
 	"ruff",
-	# "sympy",
-	# "plotly",
-	# "PyQt6",
-	# "anywidget",
+	"autogluon==1.5.0",
 ]
 
 # https://github.com/charliermarsh/ruff
@@ -101,9 +98,11 @@ select = [
 	"YTT",
 ]
 ignore = [
+	"D101",    # Missing docstring in public class
 	"D103",    # Missing docstring in public function
 	"D104",    # Missing docstring in public package
 	"D105",    # Missing docstring in magic mthod
+	"D107",    # Missing docstring in `__init__`
 	"D203",    # 1 blank line required before class docstring
 	"D205",    # 1 blank line between summary and description
 	"D401",    # First line of docstring should be in imperative mood
@@ -121,6 +120,8 @@ ignore = [
 	"N802",    # Function name should be lowercase
 	"COM812",  # Trailing comma missing (conflicts with formatter)
 	"T201",    # Remove prints
+	"ARG002",  # Unused method argument: `kwargs`
+	"PLR0913", # Too many arguments in function definition (> 10)
 ]
 
 
