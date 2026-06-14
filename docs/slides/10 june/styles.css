@@ -1,0 +1,20 @@
+body {
+    width: 1920px;
+    height: 1080px;
+    background: #fff;
+    font-family: "Inter", sans-serif;
+    display: flex;
+    flex-direction: column;
+    outline: 8px solid #0a0a0a;
+    position: relative;
+    overflow: hidden;
+}
+
+.slide-number {
+    position: absolute;
+    bottom: 20px;
+    right: 20px;
+    font-weight: 900;
+    font-size: 22px;
+    text-transform: uppercase;
+}

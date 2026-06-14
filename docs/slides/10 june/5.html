@@ -1,0 +1,159 @@
+<!DOCTYPE html>
+<html lang="en" data-slide-index="5" data-slide-total="6">
+
+<head>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="styles.css">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        .header-box {
+            position: absolute;
+            top: 90px;
+            left: 90px;
+            background: #4C1D95;
+            padding: 30px 60px;
+            transform: rotate(-5deg) skew(5deg);
+            border: 7px dotted #C084FC;
+            z-index: 10;
+        }
+
+        .header-text {
+            font-size: 72px;
+            font-weight: 800;
+            color: #FFFFFF;
+            text-transform: uppercase;
+        }
+
+        .polygon-bg {
+            position: absolute;
+            top: 150px;
+            right: 150px;
+            width: 750px;
+            height: 750px;
+            background: rgba(192, 132, 252, 0.1);
+            clip-path: polygon(25% 0%, 100% 0%, 75% 100%, 0% 100%);
+            z-index: 1;
+        }
+
+        .polygon-accent {
+            position: absolute;
+            top: 225px;
+            right: 75px;
+            width: 600px;
+            height: 600px;
+            background: rgba(76, 29, 149, 0.1);
+            clip-path: polygon(50% 0%, 100% 50%, 50% 100%, 0% 50%);
+            z-index: 2;
+        }
+
+        .content-area {
+            display: grid;
+            grid-template-columns: 1.2fr 0.8fr;
+            gap: 90px;
+            margin-top: 270px;
+            padding: 0 90px;
+            position: relative;
+            z-index: 5;
+        }
+
+        .challenge-box {
+            background: #FFFFFF;
+            border: 7px dotted #4C1D95;
+            padding-top: 45px;
+            padding-left: 45px;
+            padding-right: 45px;
+            transform: skewY(-2deg);
+        }
+
+        .knowledge-box {
+            background: #4C1D95;
+            color: #FFFFFF;
+            padding-top: 45px;
+            padding-left: 45px;
+            padding-right: 45px;
+            transform: skewY(2deg);
+            box-shadow: 22px 22px 0px #C084FC;
+        }
+
+        .section-subtitle {
+            font-size: 36px;
+            font-weight: 700;
+            margin-bottom: 30px;
+            text-transform: uppercase;
+            color: inherit;
+        }
+
+        .list-item {
+            margin-bottom: 22px;
+            font-size: 27px;
+            line-height: 1.4;
+        }
+
+        .list-item strong {
+            color: #C084FC;
+        }
+
+        .knowledge-box .list-item strong {
+            color: #FFFFFF;
+            text-decoration: underline;
+        }
+
+        .bottom-note {
+            position: absolute;
+            bottom: 60px;
+            left: 90px;
+            right: 90px;
+            font-size: 24px;
+            color: #374151;
+            border-top: 3px solid #4C1D95;
+            padding-top: 22px;
+        }
+    </style>
+</head>
+
+<script src="nav.js"></script>
+
+<body>
+    <div class="polygon-bg"></div>
+    <div class="polygon-accent"></div>
+
+    <div class="header-box">
+        <h2 class="header-text">Challenges & Knowledge</h2>
+    </div>
+
+    <div class="content-area">
+        <div class="challenge-box">
+            <h3 class="section-subtitle" style="color: #4C1D95;">Key Challenges & Solutions</h3>
+            <div class="list-item">
+                <strong>High Dimensionality:</strong> Managing exponential Hilbert spaces (2^n qubits) requires
+                efficient state representation.
+            </div>
+            <div class="list-item">
+                <strong>Quantum Noise:</strong> Mitigating measurement perturbation through hybrid architectures and
+                shot averaging.
+            </div>
+            <div class="list-item">
+                <strong>Non-Linearity:</strong> Mapping unitary operations to non-linear ML features using specific
+                Ansatz designs.
+            </div>
+        </div>
+        <div class="knowledge-box">
+            <h3 class="section-subtitle">Required Expertise</h3>
+            <div class="list-item"><strong>Mathematics:</strong> Linear Algebra, Hilbert Spaces, Optimization.</div>
+            <div class="list-item"><strong>Quantum:</strong> Qubits, Gates, Feature Maps, Measurement.</div>
+            <div class="list-item"><strong>Machine Learning:</strong> Kernel Methods, SVM, Neural Networks.</div>
+        </div>
+    </div>
+
+    <div class="bottom-note">
+        Navigating the complexity of Quantum-Classical integration for industrial-scale structured data.
+    </div>
+    <div class="slide-number">5/6</div>
+</body>
+
+</html>
