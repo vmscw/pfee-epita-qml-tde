@@ -1,0 +1,115 @@
+<!DOCTYPE html>
+<html lang="en" data-slide-index="1" data-slide-total="6">
+
+<head>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="styles.css">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        .grid-background {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-image:
+                linear-gradient(30deg, #f3e8ff 12%, transparent 12.5%, transparent 87%, #f3e8ff 87.5%, #f3e8ff),
+                linear-gradient(150deg, #f3e8ff 12%, transparent 12.5%, transparent 87%, #f3e8ff 87.5%, #f3e8ff),
+                linear-gradient(30deg, #f3e8ff 12%, transparent 12.5%, transparent 87%, #f3e8ff 87.5%, #f3e8ff),
+                linear-gradient(150deg, #f3e8ff 12%, transparent 12.5%, transparent 87%, #f3e8ff 87.5%, #f3e8ff),
+                linear-gradient(60deg, #f3e8ff 25%, transparent 25.5%, transparent 75%, #f3e8ff 75%, #f3e8ff),
+                linear-gradient(60deg, #f3e8ff 25%, transparent 25.5%, transparent 75%, #f3e8ff 75%, #f3e8ff);
+            background-size: 120px 210px;
+            background-position: 0 0, 0 0, 60px 105px, 60px 105px, 0 0, 60px 105px;
+            opacity: 0.3;
+        }
+
+        .logo-container {
+            position: absolute;
+            top: 60px;
+            width: 100%;
+            display: flex;
+            justify-content: space-between;
+            padding: 0 90px;
+            z-index: 10;
+        }
+
+        .logo {
+            height: 120px;
+            width: auto;
+            object-fit: contain;
+            scale: 1.5;
+        }
+
+        .title-box {
+            position: absolute;
+            top: 375px;
+            left: 300px;
+            background: #4C1D95;
+            padding: 60px 90px;
+            transform: rotate(-10deg) skew(10deg);
+            box-shadow: 30px 30px 0px #C084FC;
+            border: 7px dotted #C084FC;
+        }
+
+        .main-title {
+            font-size: 96px;
+            font-weight: 800;
+            color: #FFFFFF;
+            line-height: 1.1;
+            text-transform: uppercase;
+        }
+
+        .subtitle-container {
+            position: absolute;
+            bottom: 90px;
+            left: 90px;
+            right: 90px;
+            border-top: 3px solid #4C1D95;
+            padding-top: 30px;
+        }
+
+        .subtitle {
+            font-size: 48px;
+            font-weight: 600;
+            color: #374151;
+        }
+
+        .accent-polygon {
+            position: absolute;
+            top: 150px;
+            right: -75px;
+            width: 450px;
+            height: 450px;
+            background: rgba(192, 132, 252, 0.2);
+            clip-path: polygon(50% 0%, 100% 38%, 82% 100%, 18% 100%, 0% 38%);
+            transform: rotate(15deg);
+        }
+    </style>
+</head>
+
+<script src="nav.js"></script>
+
+<body>
+    <div class="grid-background"></div>
+    <div class="accent-polygon"></div>
+    <div class="logo-container">
+        <img src="assets/epita_logo.webp" class="logo" alt="EPITA Logo">
+        <img src="assets/scaleway_logo.webp" class="logo" alt="Scaleway Logo">
+        <img src="assets/epita_quantum_major_logo.jpg" class="logo" alt="Scaleway Logo">
+    </div>
+    <div class="title-box">
+        <h1 class="main-title">hybrid quantum<br>machine learning<br>for tabluar data</h1>
+    </div>
+    <div class="subtitle-container">
+        <p class="subtitle">PFEE Presentation | EPITA Quantum Major &amp; Scaleway Partnership</p>
+    </div>
+    <div class="slide-number">1/6</div>
+</body>
+
+</html>

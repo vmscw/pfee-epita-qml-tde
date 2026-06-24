@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html lang="en" data-slide-index="6" data-slide-total="6">
+
+<head>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="styles.css">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        .grid-overlay {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-image: radial-gradient(#C084FC 1px, transparent 1px);
+            background-size: 60px 60px;
+            opacity: 0.2;
+        }
+
+        .qa-center {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%) rotate(-10deg) skew(10deg);
+            background: #4C1D95;
+            padding: 90px 150px;
+            border: 12px dotted #C084FC;
+            box-shadow: 45px 45px 0px rgba(192, 132, 252, 0.3);
+            text-align: center;
+        }
+
+        .qa-title {
+            font-size: 180px;
+            font-weight: 900;
+            color: #FFFFFF;
+            text-transform: uppercase;
+            letter-spacing: 15px;
+        }
+
+        .qa-subtitle {
+            font-size: 48px;
+            color: #C084FC;
+            font-weight: 600;
+            margin-top: 15px;
+        }
+
+        .accent-shape {
+            position: absolute;
+            top: -150px;
+            left: -150px;
+            width: 600px;
+            height: 600px;
+            background: rgba(76, 29, 149, 0.05);
+            clip-path: polygon(0% 0%, 100% 0%, 0% 100%);
+        }
+    </style>
+</head>
+
+<script src="nav.js"></script>
+
+<body>
+    <div class="grid-overlay"></div>
+    <div class="accent-shape"></div>
+
+    <div class="qa-center">
+        <h1 class="qa-title">Q&A</h1>
+        <p class="qa-subtitle">Thank you for your attention</p>
+    </div>
+    <div class="slide-number">6/6</div>
+</body>
+
+</html>
