@@ -1,0 +1,206 @@
+<!doctype html>
+<html
+    lang="en"
+    data-slide-part="0"
+    data-slide-slide="5"
+    data-slide-total="6"
+    data-slide-prev="0.4.html"
+    data-slide-next="0.6.html"
+>
+    <head>
+        <meta charset="UTF-8" />
+        <title>Challenges &amp; Knowledge</title>
+        <link
+            href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css"
+            rel="stylesheet"
+        />
+        <link rel="stylesheet" href="styles.css" />
+        <style>
+            .header-box {
+                position: absolute;
+                top: 60px;
+                left: 80px;
+                background: #4c1d95;
+                padding: 16px 45px;
+                transform: rotate(-4deg);
+                border: 6px dotted #c084fc;
+                z-index: 10;
+            }
+
+            .header-text {
+                font-size: 46px;
+                font-weight: 800;
+                color: #ffffff;
+                text-transform: uppercase;
+                margin: 0;
+                letter-spacing: 1px;
+            }
+
+            .content-area {
+                position: absolute;
+                top: 170px;
+                bottom: 140px;
+                left: 80px;
+                right: 80px;
+                display: flex;
+                gap: 50px;
+                align-items: center;
+                justify-content: center;
+                z-index: 5;
+            }
+
+            .challenge-box {
+                flex: 0 0 60%;
+                background: rgba(255, 255, 255, 0.75);
+                border: 6px dotted #4c1d95;
+                padding: 30px 40px;
+                transform: rotate(-1deg);
+                backdrop-filter: blur(4px);
+                box-shadow: 8px 8px 0px rgba(192, 132, 252, 0.2);
+                height: auto;
+                max-height: 80%;
+                overflow-y: auto;
+                display: flex;
+                flex-direction: column;
+                justify-content: center;
+                box-sizing: border-box;
+            }
+
+            .knowledge-box {
+                flex: 1;
+                background: #4c1d95;
+                color: #ffffff;
+                padding: 30px 35px;
+                transform: rotate(3deg);
+                box-shadow: -12px 12px 0px rgba(192, 132, 252, 0.3);
+                height: auto;
+                max-height: 80%;
+                overflow-y: auto;
+                display: flex;
+                flex-direction: column;
+                justify-content: center;
+                box-sizing: border-box;
+            }
+
+            .section-subtitle {
+                font-size: 28px;
+                font-weight: 700;
+                margin-bottom: 20px;
+                text-transform: uppercase;
+                color: inherit;
+            }
+
+            .challenge-box .section-subtitle {
+                color: #4c1d95;
+            }
+
+            .knowledge-box .section-subtitle {
+                color: #ffffff;
+            }
+
+            .list-item {
+                margin-bottom: 14px;
+                font-size: 21px;
+                line-height: 1.4;
+                color: #374151;
+            }
+
+            .knowledge-box .list-item {
+                color: #ffffff;
+            }
+
+            .challenge-box .list-item strong {
+                color: #4c1d95;
+                font-weight: 700;
+            }
+
+            .challenge-box .list-item .sub-label {
+                display: block;
+                font-weight: 400;
+                color: #7c6f8a;
+                font-size: 19px;
+                margin-top: 2px;
+                padding-left: 10px;
+            }
+
+            .knowledge-box .list-item strong {
+                color: #ffffff;
+                text-decoration: underline;
+            }
+
+            /* --- Footer --- */
+            .bottom-note {
+                position: absolute;
+                bottom: 55px;
+                left: 80px;
+                right: 80px;
+                font-size: 22px;
+                color: #374151;
+                border-top: 2px solid #c084fc;
+                padding-top: 18px;
+                z-index: 5;
+                text-align: center;
+            }
+        </style>
+
+        <script src="nav.js" defer=""></script>
+    </head>
+
+    <body>
+        <div class="slide page-1">
+            <div class="polygon-bg"></div>
+
+            <div class="header-box">
+                <h2 class="header-text">Challenges &amp; Knowledge</h2>
+            </div>
+
+            <div class="content-area">
+                <!-- Left box: 60% width, tilted +3deg -->
+                <div class="challenge-box">
+                    <h3 class="section-subtitle">Quantum Bricks in a Hybrid model?</h3>
+                    <div class="list-item">
+                        <strong>Dimension reduction:</strong>
+                        <span class="sub-label">
+                            use qPCA for reducing a potentially huge space into a smaller one.
+                            Pipeline with a classical model.
+                        </span>
+                    </div>
+                    <div class="list-item">
+                        <strong>Dynamic richness:</strong>
+                        <span class="sub-label">
+                            Use Quantum Reservoir as a dynamic resource for analog time-series
+                            processing.
+                        </span>
+                    </div>
+                    <div class="list-item">
+                        <strong>Hyperparameters tuning:</strong>
+                        <span class="sub-label">
+                            Use of QAOA or VQE for hyperparameters tuning.
+                        </span>
+                    </div>
+                    <div class="list-item">
+                        <strong>Data generation:</strong>
+                        <span class="sub-label">
+                            use QGAN for data augmentation on unbalanced tabular dataset.
+                        </span>
+                    </div>
+                </div>
+
+                <!-- Right box: 40% width, opposite tilt -3deg -->
+                <div class="knowledge-box">
+                    <h3 class="section-subtitle">Some open questions</h3>
+                    <div class="list-item">How to compare 2 models ?</div>
+                    <div class="list-item">Scalability and Stability: NISQ vs FTQC ?</div>
+                    <div class="list-item">Is there any bottleneck in the classical paradigm ?</div>
+                </div>
+            </div>
+
+            <div class="bottom-note">
+                Navigating the complexity of Quantum-Classical integration for industrial-scale
+                structured data.
+            </div>
+        </div>
+
+        <div class="slide-indicator">5/6</div>
+    </body>
+</html>

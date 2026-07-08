@@ -1,0 +1,6 @@
+.vscode
+node_modules
+slides/assets
+.gitignore
+package-lock.json
+slides.pdf

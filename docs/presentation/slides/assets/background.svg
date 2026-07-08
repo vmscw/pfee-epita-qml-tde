@@ -1,0 +1,19 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1920 1080">
+  <defs>
+    <pattern id="hexGrid" width="120" height="208" patternUnits="userSpaceOnUse">
+      <path d="M60 0 L120 34.6 L120 104 L60 138.6 L0 104 L0 34.6 Z" fill="none" stroke="#c084fc" stroke-width="1.5" opacity="0.08"/>
+      <path d="M60 104 L120 138.6 L120 208 L60 242.6 L0 208 L0 138.6 Z" fill="none" stroke="#c084fc" stroke-width="1.5" opacity="0.08"/>
+    </pattern>
+    <linearGradient id="bgGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#faf5ff"/>
+      <stop offset="100%" stop-color="#f0e6fa"/>
+    </linearGradient>
+  </defs>
+  <rect width="1920" height="1080" fill="url(#bgGrad)"/>
+  <rect width="1920" height="1080" fill="url(#hexGrid)"/>
+  <!-- Decorative triangles -->
+  <polygon points="0,0 200,0 0,200" fill="#d4c2f0" opacity="0.1"/>
+  <polygon points="1920,1080 1720,1080 1920,880" fill="#c084fc" opacity="0.06"/>
+  <polygon points="300,1080 500,900 700,1080" fill="#d4c2f0" opacity="0.05"/>
+  <polygon points="1500,0 1700,0 1500,200" fill="#c084fc" opacity="0.05"/>
+</svg>

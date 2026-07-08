@@ -1,0 +1,231 @@
+<!doctype html>
+<html
+    lang="en"
+    data-slide-part="0"
+    data-slide-slide="4"
+    data-slide-total="6"
+    data-slide-prev="0.3.html"
+    data-slide-next="0.5.html"
+>
+    <head>
+        <meta charset="UTF-8" />
+        <title>Project Progress &amp; Roadmap</title>
+        <link
+            href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css"
+            rel="stylesheet"
+        />
+        <link rel="stylesheet" href="styles.css" />
+        <style>
+            /* --- Header: centered, smaller --- */
+            .header-box {
+                position: absolute;
+                top: 50px;
+                left: 50%;
+                transform: translateX(-50%) skewX(-8deg);
+                background: #4c1d95;
+                padding: 16px 45px;
+                border: 6px dotted #c084fc;
+                z-index: 5;
+            }
+
+            .header-text {
+                font-size: 44px;
+                font-weight: 800;
+                color: #ffffff;
+                text-transform: uppercase;
+                transform: skewX(8deg);
+                margin: 0;
+                letter-spacing: 1px;
+            }
+
+            /* --- Main content: fills between header and footer --- */
+            .status-container {
+                position: absolute;
+                top: 210px;
+                left: 90px;
+                right: 90px;
+                display: flex;
+                justify-content: space-between;
+                gap: 40px;
+                z-index: 2;
+            }
+
+            .status-item {
+                flex: 1;
+                background: rgba(255, 255, 255, 0.6);
+                padding: 20px 25px;
+                border-left: 8px solid #4c1d95;
+                border-radius: 4px;
+                backdrop-filter: blur(4px);
+            }
+
+            .status-label {
+                font-weight: 800;
+                color: #4c1d95;
+                text-transform: uppercase;
+                font-size: 20px;
+                margin-bottom: 10px;
+                display: block;
+            }
+
+            .status-text {
+                font-size: 22px;
+                color: #374151;
+                line-height: 1.4;
+                margin: 0;
+            }
+
+            /* --- Gantt chart --- */
+            .gantt-chart {
+                position: absolute;
+                top: 320px; /* below status container */
+                left: 90px;
+                right: 90px;
+                bottom: 130px; /* leave room for footer */
+                z-index: 2;
+                display: flex;
+                flex-direction: column;
+                justify-content: center;
+                gap: 12px;
+            }
+
+            .gantt-row {
+                display: flex;
+                align-items: center;
+                gap: 30px;
+                height: 50px;
+            }
+
+            .gantt-label {
+                width: 260px;
+                font-weight: 600;
+                color: #4c1d95;
+                font-size: 24px;
+                flex-shrink: 0;
+            }
+
+            .gantt-timeline {
+                flex-grow: 1;
+                height: 40px;
+                background: #f3f4f6;
+                position: relative;
+                border: 1px solid #e5e7eb;
+                border-radius: 4px;
+            }
+
+            .gantt-bar {
+                height: 100%;
+                position: absolute;
+                top: 0;
+                display: flex;
+                align-items: center;
+                padding-left: 15px;
+                font-size: 16px;
+                font-weight: 700;
+                color: #ffffff;
+                text-transform: uppercase;
+                border-radius: 4px;
+                box-sizing: border-box;
+            }
+
+            .bar-done {
+                background: #4c1d95;
+                width: 25%;
+                left: 0;
+            }
+
+            .bar-progress {
+                background: #c084fc;
+                width: 50%;
+                left: 25%;
+            }
+
+            .bar-todo {
+                background: #e5e7eb;
+                width: 25%;
+                left: 75%;
+                border: 2px dashed #4c1d95;
+                color: #4c1d95;
+                background: transparent;
+            }
+
+            .bottom-note {
+                position: absolute;
+                bottom: 50px;
+                left: 90px;
+                right: 90px;
+                font-size: 22px;
+                color: #374151;
+                border-top: 2px solid #c084fc;
+                padding-top: 18px;
+                z-index: 5;
+                text-align: center;
+            }
+        </style>
+
+        <script src="nav.js" defer=""></script>
+    </head>
+
+    <body>
+        <div class="slide page-1">
+            <div class="header-box">
+                <h2 class="header-text">Project Progress &amp; Roadmap</h2>
+            </div>
+            <div class="status-container">
+                <div class="status-item">
+                    <span class="status-label">Completed</span>
+                    <p class="status-text">
+                        Literature review of classical SOTA (TabPFN, TabArena) and theoretical study
+                        of QSVMs.
+                    </p>
+                </div>
+                <div class="status-item">
+                    <span class="status-label">In Progress</span>
+                    <p class="status-text">
+                        Implementation of Hybrid Quantum Reservoir Computing (QRC) and testing on
+                        Lorenz attractor.
+                    </p>
+                </div>
+                <div class="status-item">
+                    <span class="status-label">To Do</span>
+                    <p class="status-text">
+                        Final benchmarking against classical models and integration with Scaleway
+                        QaaS environment.
+                    </p>
+                </div>
+            </div>
+            <div class="gantt-chart">
+                <div class="gantt-row">
+                    <div class="gantt-label">SOTA Review</div>
+                    <div class="gantt-timeline">
+                        <div class="gantt-bar bar-done">Done</div>
+                    </div>
+                </div>
+                <div class="gantt-row">
+                    <div class="gantt-label">Quantum Design</div>
+                    <div class="gantt-timeline">
+                        <div class="gantt-bar bar-progress">In Progress</div>
+                    </div>
+                </div>
+                <div class="gantt-row">
+                    <div class="gantt-label">Hybrid QRC</div>
+                    <div class="gantt-timeline">
+                        <div class="gantt-bar bar-progress">In Progress</div>
+                    </div>
+                </div>
+                <div class="gantt-row">
+                    <div class="gantt-label">Benchmarking</div>
+                    <div class="gantt-timeline">
+                        <div class="gantt-bar bar-todo">To Do</div>
+                    </div>
+                </div>
+            </div>
+            <div class="bottom-note">
+                The project is currently transitioning from theoretical research to active hybrid
+                implementation and hardware testing.
+            </div>
+        </div>
+
+        <div class="slide-indicator">4/6</div>
+    </body>
+</html>

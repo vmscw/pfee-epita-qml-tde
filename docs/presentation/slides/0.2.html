@@ -1,0 +1,184 @@
+<!doctype html>
+<html
+    lang="en"
+    data-slide-part="0"
+    data-slide-slide="2"
+    data-slide-total="6"
+    data-slide-prev="0.1.html"
+    data-slide-next="0.3.html"
+>
+    <head>
+        <meta charset="UTF-8" />
+        <title>Project Overview &amp; Team</title>
+        <link
+            href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css"
+            rel="stylesheet"
+        />
+        <link rel="stylesheet" href="styles.css" />
+        <style>
+            /* --- Header: centered and smaller --- */
+            .header-box {
+                position: absolute;
+                top: 60px;
+                left: 50%;
+                transform: translateX(-50%) rotate(-4deg) skew(4deg);
+                background: #4c1d95;
+                padding: 20px 50px;
+                border: 6px dotted #c084fc;
+                z-index: 5;
+            }
+
+            .header-text {
+                font-size: 48px;
+                font-weight: 800;
+                color: #ffffff;
+                text-transform: uppercase;
+                margin: 0;
+                letter-spacing: 1px;
+            }
+
+            .content-grid {
+                position: absolute;
+                top: 180px;
+                bottom: 120px;
+                left: 90px;
+                right: 90px;
+                display: flex;
+                flex-direction: column;
+                gap: 25px;
+                z-index: 2;
+            }
+
+            .content-row {
+                display: flex;
+                flex: 1;
+                gap: 50px;
+            }
+
+            .content-row.top-row {
+                justify-content: space-between;
+            }
+
+            .content-row.bottom-row {
+                justify-content: center;
+            }
+
+            .content-row.top-row .team-section {
+                flex: 1;
+            }
+
+            .content-row.bottom-row .team-section {
+                width: 40%;
+            }
+
+            .team-section {
+                background: rgba(192, 132, 252, 0.1);
+                padding: 20px 30px;
+                border-left: 12px solid #4c1d95;
+                transform: perspective(800px) rotateY(6deg);
+                display: flex;
+                flex-direction: column;
+                justify-content: center;
+            }
+
+            .section-title {
+                font-size: 32px;
+                font-weight: 700;
+                color: #4c1d95;
+                margin-bottom: 20px;
+                text-transform: uppercase;
+            }
+
+            .member-list {
+                list-style: none;
+                padding: 0;
+                margin: 0;
+            }
+
+            .member-item {
+                margin-bottom: 16px;
+                font-size: 24px;
+                color: #374151;
+            }
+
+            .member-role {
+                font-weight: 600;
+                color: #4c1d95;
+                display: block;
+                font-size: 20px;
+            }
+
+            .bottom-text {
+                position: absolute;
+                bottom: 50px;
+                left: 90px;
+                right: 90px;
+                font-size: 24px;
+                color: #374151;
+                border-top: 2px solid #c084fc;
+                padding-top: 18px;
+                z-index: 5;
+                text-align: center;
+            }
+        </style>
+
+        <script src="nav.js" defer=""></script>
+    </head>
+
+    <body>
+        <div class="slide page-1">
+            <div class="polygon-decoration"></div>
+            <div class="header-box">
+                <h2 class="header-text">Project Overview &amp; Team</h2>
+            </div>
+            <div class="content-grid">
+                <div class="content-row top-row">
+                    <div class="team-section">
+                        <h3 class="section-title">EPITA Students</h3>
+                        <ul class="member-list">
+                            <li class="member-item">
+                                <span class="member-role">
+                                    Lead Researcher &amp; Quantum Implementation
+                                </span>
+                                Bob de Boisvilliers
+                            </li>
+                            <li class="member-item">
+                                <span class="member-role">Classical SOTA Benchmarking</span>
+                                Christopher Bonnelly
+                            </li>
+                            <li class="member-item">
+                                <span class="member-role">Hybrid Model Integration</span>
+                                Calixte Robert
+                            </li>
+                        </ul>
+                    </div>
+                    <div class="team-section">
+                        <h3 class="section-title">Scaleway Supervision</h3>
+                        <ul class="member-list">
+                            <li class="member-item">
+                                <span class="member-role">Technical Supervisor</span>
+                                Industrial Lead (Scaleway QaaS)
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+                <div class="content-row bottom-row">
+                    <div class="team-section">
+                        <h3 class="section-title">Project Scope</h3>
+                        <ul class="member-list">
+                            <li class="member-item">
+                                Exploring Hybrid QML algorithms on structured/tabular data
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+            <div class="bottom-text">
+                EPITA students handle research and implementation; Scaleway provides infrastructure
+                and industrial context.
+            </div>
+        </div>
+
+        <div class="slide-indicator">2/6</div>
+    </body>
+</html>
