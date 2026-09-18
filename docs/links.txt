@@ -1,3 +1,7 @@
 Driving a Car with a Tabular Foundation Model (TabPFN)
 
 https://jamblejoe.github.io/posts/tabpfn-drives-through-cave/post.html
+
+???
+
+https://typesafe.ai/blog/introducing-system-one-models-and-jev
